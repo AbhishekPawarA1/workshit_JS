@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .todo-item {
+            margin: 10px 0;
+        }
+        .todo-item button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <input type="text" id="todo-input" placeholder="Add a task">
+    <button id="add-button">Add</button>
+    <button id="reset-button">Reset</button>
+    <div id="todo-list"></div>
+
+    <script>
+        const todoManager = (function () {
+            let todos = [];
+            return {
+                add(task) {
+                    if (task) todos.push(task);
+                },
+                remove(index) {
+                    todos.splice(index, 1);
+                },
+                reset() {
+                    todos = [];
+                },
+                get() {
+                    return todos;
+                }
+            };
+        })();
+
+      
+        const todoInput = document.getElementById('todo-input');
+        const todoList = document.getElementById('todo-list');
+
+    
+        function renderTodos() {
+            todoList.innerHTML = '';
+            todoManager.get().forEach((task, index) => {
+                const item = document.createElement('div');
+                item.className = 'todo-item';
+                item.innerHTML = `
+                    ${task} 
+                    <button onclick="removeTask(${index})">Remove</button>
+                `;
+                todoList.appendChild(item);
+            });
+        }
+
+       
+        document.getElementById('add-button').onclick = () => {
+            const task = todoInput.value.trim();
+            if (task) {
+                todoManager.add(task);
+                todoInput.value = '';
+                renderTodos();
+            } else {
+                alert('Please enter a task.');
+            }
+        };
+
+       
+        document.getElementById('reset-button').onclick = () => {
+            todoManager.reset();
+            renderTodos();
+        };
+
+      
+        function removeTask(index) {
+            todoManager.remove(index);
+            renderTodos();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+function createIncrementers() {
+  let result = [];
+  for (var i = 0; i < 3; i++) {
+      result.push(() => i);
+      break
+  }
+  return result;
+}
+console.log(createIncrementers()[0]()); // Expected Output: 0
